@@ -44,7 +44,7 @@ pipeline {
                     }
                 }
                 failure {
-                    emailext(subject: 'Pipeline Failed', body: 'Static analysis stage failed. Please check the Jenkins logs.', to: 'your-email@example.com')
+                    emailext(subject: 'Pipeline Failed', body: 'Static analysis stage failed. Please check the Jenkins logs.', to: 'nehachoudhari118@gmmail.com')
                     echo 'Static analysis stage failed.'
                     error('Static analysis failed. Pipeline aborted.')
                 }
