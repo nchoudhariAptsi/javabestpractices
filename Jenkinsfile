@@ -25,17 +25,16 @@ pipeline {
         stage('Static Analysis') {
             steps {
                 echo "Running Checkstyle"
-                bat "mvn checkstyle:checkstyle"
+                sh "mvn checkstyle:checkstyle"
                 
                 echo "Running PMD"
-                bat "mvn pmd:pmd"
+                sh "mvn pmd:pmd"
                 
                 echo "Running SpotBugs"
-                bat "mvn spotbugs:spotbugs"
+                sh "mvn spotbugs:spotbugs"
             }
             post {
                 always {
-                    // Archive the reports
                     archiveArtifacts artifacts: 'target/checkstyle-result.xml, target/pmd.xml, target/spotbugs.xml', allowEmptyArchive: true
                     echo 'Static analysis reports archived.'
                 }
@@ -55,10 +54,7 @@ pipeline {
         stage('Parse and Generate Report') {
             steps {
                 script {
-                    // Use python3 if that's the installed version
-                    bat 'python3 parse_sastTools.py'
-                    
-                    // Optionally, archive the generated CSV file
+                    sh 'python3 parse_sastTools.py'
                     archiveArtifacts artifacts: 'sasttools_summary.csv', allowEmptyArchive: true
                 }
             }
@@ -80,7 +76,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Code building"
-                bat "mvn clean package"
+                sh "mvn clean package"
             }
             post {
                 always {
@@ -100,7 +96,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Code testing"
-                bat "mvn test"
+                sh "mvn test"
             }
             post {
                 always {
@@ -116,10 +112,11 @@ pipeline {
                 }
             }
         }
+
         stage('OWASP Dependency Check') {
             steps {
                 echo "Running OWASP Dependency Check"
-                bat '''
+                sh '''
                 mvn org.owasp:dependency-check-maven:check -Dformat=HTML -DoutputDirectory=dependency-check-report
                 mvn org.owasp:dependency-check-maven:check -Dformat=ALL -DoutputDirectory=dependency-check-report
                 '''
@@ -139,12 +136,11 @@ pipeline {
                 }
             }
         }
+
         stage('Generate SBOM') {
             steps {
                 echo "Generating SBOM in CycloneDX format"
-                bat '''
-                syft . --output cyclonedx=sbom.xml
-                '''
+                sh 'syft . --output cyclonedx=sbom.xml'
                 archiveArtifacts artifacts: 'sbom.xml', allowEmptyArchive: false
             }
             post {
@@ -165,9 +161,7 @@ pipeline {
         stage('Scan with Grype') {
             steps {
                 echo "Scanning SBOM with Grype"
-                bat '''
-                grype sbom:sbom.xml --output table
-                '''
+                sh 'grype sbom:sbom.xml --output table'
             }
             post {
                 success {
@@ -188,10 +182,10 @@ pipeline {
             steps {
                 script {
                     echo "Deploying the application"
-                    bat '''
+                    sh '''
                     cd target
                     if [ -f "javabestpractices-1.0-SNAPSHOT-webservice.jar" ]; then
-                        java -jar javabestpractices-1.0-SNAPSHOT-webservice.jar
+                        java -jar javabestpractices-1.0-SNAPSHOT-webservice.jar &
                     else
                         echo "Error: JAR file not found!"
                         exit 1
@@ -211,7 +205,5 @@ pipeline {
                 }
             }
         }
-         
-
     }
 }
