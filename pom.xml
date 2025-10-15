@@ -15,7 +15,6 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -26,43 +25,42 @@
     </dependencies>
 
     <build>
-    <plugins>
-        <!-- SpotBugs Plugin -->
-        <plugin>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-maven-plugin</artifactId>
-            <version>4.7.3.0</version>
-            <configuration>
-                <effort>Max</effort>
-                <threshold>Low</threshold>
-            </configuration>
-        </plugin>
+        <plugins>
+            <!-- SpotBugs Plugin -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.3.0</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                </configuration>
+            </plugin>
 
-        <!-- PMD Plugin -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-pmd-plugin</artifactId>
-            <version>3.20.0</version>
-            <configuration>
-                <printFailingErrors>true</printFailingErrors>
-            </configuration>
-        </plugin>
+            <!-- PMD Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.20.0</version>
+                <configuration>
+                    <printFailingErrors>true</printFailingErrors>
+                </configuration>
+            </plugin>
 
-        <!-- Checkstyle Plugin -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>3.2.0</version>
-        </plugin>
+            <!-- Checkstyle Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
 
-        <!-- OWASP Dependency Check -->
-        <plugin>
-            <groupId>org.owasp</groupId>
-            <artifactId>dependency-check-maven</artifactId>
-            <version>8.3.0</version>
-        </plugin>
-    </plugins>
-</build>
+            <!-- OWASP Dependency Check -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>8.3.0</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
-
